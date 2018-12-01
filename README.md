@@ -1,4 +1,5 @@
 ## kotlin-extensions
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/81a9a254ed8545c6b42cabb6ab28d0c7)](https://app.codacy.com/app/yuriy.kulikov.87/kotlin-extensions?utm_source=github.com&utm_medium=referral&utm_content=yuriykulikov/kotlin-extensions&utm_campaign=Badge_Grade_Dashboard)
 [![Build Status](https://travis-ci.org/yuriykulikov/kotlin-extensions.svg?branch=master)](https://travis-ci.org/yuriykulikov/kotlin-extensions)
 [![codecov](https://codecov.io/gh/yuriykulikov/kotlin-extensions/branch/master/graph/badge.svg)](https://codecov.io/gh/yuriykulikov/kotlin-extensions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
