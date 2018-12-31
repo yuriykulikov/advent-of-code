@@ -5,8 +5,10 @@ package extensions.kotlin
  *
  * The operation is _intermediate_ and _stateless_.
  */
+@Deprecated("does not work properly with contstraint sequences")
 fun <T> Sequence<T>.cycle(): Sequence<T> {
     return when {
+        this.constrainOnce() == this -> this.toList().asSequence().cycle()
         this.none() -> this
         else -> generateSequence(this) { this }.flatten()
     }
@@ -40,6 +42,7 @@ fun <T, R : Any> Sequence<T>.scanAndTermintateOnNull(seed: R?, operation: (R, T)
  *
  * The operation is _intermediate_ and _stateful_.
  */
+@Deprecated("Scan was added to stdlib", ReplaceWith("scan"))
 fun <T, R : Any> Sequence<T>.scan(seed: R, operation: (R, T) -> R): Sequence<R> {
     return scanAndTermintateOnNull(seed, operation)
 }
@@ -51,6 +54,7 @@ fun <T, R : Any> Sequence<T>.scan(seed: R, operation: (R, T) -> R): Sequence<R> 
  *
  * The operation is _intermediate_ and _stateful_.
  */
+@Deprecated("Scan was added to stdlib", ReplaceWith("scan"))
 fun <T : Any> Sequence<T>.scan(operation: (T, T) -> T): Sequence<T> {
     val upstream = this.iterator()
 
