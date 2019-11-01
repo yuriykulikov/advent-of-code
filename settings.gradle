@@ -1,2 +1,4 @@
 include ':collections'
 include ':advent-of-code-2018'
+include ':algorithms'
+include ':quiz'
