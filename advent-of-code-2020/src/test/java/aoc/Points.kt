@@ -2,17 +2,17 @@ package aoc
 
 import kotlin.math.abs
 
-data class Point(val x: Int, val y: Int) {
-    operator fun minus(other: Point) = Point(x - other.x, y - other.y)
-    operator fun plus(other: Point) = Point(x + other.x, y + other.y)
-    operator fun times(times: Int): Point = copy(x = x * times, y = y * times)
+data class Point(val x: Int, val y: Int, val z: Int = 0, val w: Int = 0) {
+    operator fun minus(other: Point) = Point(x - other.x, y - other.y, z - other.z, w - other.w)
+    operator fun plus(other: Point) = Point(x + other.x, y + other.y, z + other.z, w + other.w)
+    operator fun times(times: Int): Point = copy(x = x * times, y = y * times, z = z * times)
 }
 
 fun Point.left(inc: Int = 1) = copy(x = x - inc)
 fun Point.right(inc: Int = 1) = copy(x = x + inc)
 fun Point.up(inc: Int = 1) = copy(y = y - inc)
 fun Point.down(inc: Int = 1) = copy(y = y + inc)
-fun Point.manhattan(): Int = abs(x) + abs(y)
+fun Point.manhattan(): Int = abs(x) + abs(y) + abs(z)
 fun Point.rotateCCW() = Point(x = -y, y = x)
 fun Point.rotateCW() = Point(x = y, y = -x)
 
