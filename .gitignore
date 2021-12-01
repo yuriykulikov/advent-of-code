@@ -5,3 +5,5 @@ hs_err_pid*
 .idea/
 local.properties
 *.iml
+/target
+Cargo.lock

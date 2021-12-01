@@ -1,0 +1,11 @@
+[package]
+name = "advent-of-code-2021"
+version = "0.1.0"
+authors = ["Yuriy Kulikov <yuriy.kulikov.87@gmail.com>"]
+edition = "2018"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+itertools = "0.10.1"
