@@ -3,22 +3,24 @@ use std::str::FromStr;
 use itertools::Itertools;
 
 fn count_increases(input: &str) -> u32 {
-    input.lines()
+    input
+        .lines()
         .into_iter()
-        .map(|line| { u32::from_str(line).unwrap() })
+        .map(|line| u32::from_str(line).unwrap())
         .tuple_windows()
-        .filter(|(p, n)| { n > p })
+        .filter(|(p, n)| n > p)
         .count() as u32
 }
 
 fn count_window_increases(input: &str) -> u32 {
-    input.lines()
+    input
+        .lines()
         .into_iter()
-        .map(|line| { u32::from_str(line).unwrap() })
+        .map(|line| u32::from_str(line).unwrap())
         .tuple_windows::<(_, _, _)>()
         .map(|it| it.0 + it.1 + it.2)
         .tuple_windows()
-        .filter(|(p, n)| { n > p })
+        .filter(|(p, n)| n > p)
         .count() as u32
 }
 

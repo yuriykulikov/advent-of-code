@@ -11,15 +11,23 @@ impl Line {
     fn points(&self) -> Vec<Point> {
         if self.is_vertical() {
             let x = self.start.x;
-            points(self.start.y, self.end.y).into_iter().map(|y| Point { x, y }).collect::<Vec<Point>>()
+            points(self.start.y, self.end.y)
+                .into_iter()
+                .map(|y| Point { x, y })
+                .collect::<Vec<Point>>()
         } else if self.is_horizontal() {
             let y = self.start.y;
-            points(self.start.x, self.end.x).into_iter().map(|x| Point { x, y }).collect::<Vec<Point>>()
+            points(self.start.x, self.end.x)
+                .into_iter()
+                .map(|x| Point { x, y })
+                .collect::<Vec<Point>>()
         } else {
             let x_points = points(self.start.x, self.end.x);
             let y_points = points(self.start.y, self.end.y);
             assert_eq!(x_points.len(), y_points.len());
-            x_points.into_iter().zip(y_points)
+            x_points
+                .into_iter()
+                .zip(y_points)
                 .map(|(x, y)| Point { x, y })
                 .collect()
         }
@@ -37,7 +45,11 @@ impl Line {
 /// Returns a vector of 1-dimensional points between from and to. If to < from,
 /// vec contains points in descending order.
 fn points(from: u32, to: u32) -> Vec<u32> {
-    if from < to { (from..=to).collect() } else { (to..=from).rev().collect() }
+    if from < to {
+        (from..=to).collect()
+    } else {
+        (to..=from).rev().collect()
+    }
 }
 
 #[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
@@ -49,15 +61,22 @@ struct Point {
 impl Point {
     fn parse(str: &str) -> Point {
         let (x, y) = str.split_once(",").unwrap();
-        Point { x: u32::from_str(x.trim()).unwrap(), y: u32::from_str(y.trim()).unwrap() }
+        Point {
+            x: u32::from_str(x.trim()).unwrap(),
+            y: u32::from_str(y.trim()).unwrap(),
+        }
     }
 }
 
 /// 5,5 -> 8,2
 fn parse(input: &str) -> Vec<Line> {
-    input.lines()
+    input
+        .lines()
         .filter_map(|line| line.split_once("->"))
-        .map(|(start, end)| Line { start: Point::parse(start), end: Point::parse(end) })
+        .map(|(start, end)| Line {
+            start: Point::parse(start),
+            end: Point::parse(end),
+        })
         .collect()
 }
 
@@ -75,7 +94,12 @@ mod test {
             .flat_map(|line| line.points())
             .collect::<Vec<Point>>();
 
-        let overlaps_of_2 = points.iter().counts().values().filter(|&&count| count >= 2).count();
+        let overlaps_of_2 = points
+            .iter()
+            .counts()
+            .values()
+            .filter(|&&count| count >= 2)
+            .count();
 
         assert_eq!(overlaps_of_2, 5);
     }
@@ -88,7 +112,12 @@ mod test {
             .flat_map(|line| line.points())
             .collect::<Vec<Point>>();
 
-        let overlaps_of_2 = points.iter().counts().values().filter(|&&count| count >= 2).count();
+        let overlaps_of_2 = points
+            .iter()
+            .counts()
+            .values()
+            .filter(|&&count| count >= 2)
+            .count();
 
         assert_eq!(overlaps_of_2, 5167);
     }
@@ -100,7 +129,12 @@ mod test {
             .flat_map(|line| line.points())
             .collect::<Vec<Point>>();
 
-        let overlaps_of_2 = points.iter().counts().values().filter(|&&count| count >= 2).count();
+        let overlaps_of_2 = points
+            .iter()
+            .counts()
+            .values()
+            .filter(|&&count| count >= 2)
+            .count();
 
         assert_eq!(overlaps_of_2, 12);
     }
@@ -112,7 +146,12 @@ mod test {
             .flat_map(|line| line.points())
             .collect::<Vec<Point>>();
 
-        let overlaps_of_2 = points.iter().counts().values().filter(|&&count| count >= 2).count();
+        let overlaps_of_2 = points
+            .iter()
+            .counts()
+            .values()
+            .filter(|&&count| count >= 2)
+            .count();
 
         assert_eq!(overlaps_of_2, 17604);
     }

@@ -42,17 +42,21 @@ impl Fishes {
 }
 
 fn parse(input: &str) -> Vec<u32> {
-    input.split(",").map(|it| u32::from_str(it).unwrap()).collect()
+    input
+        .split(",")
+        .map(|it| u32::from_str(it).unwrap())
+        .collect()
 }
 
 #[cfg(test)]
 mod test {
-    use crate::day_06::{Fishes, parse};
+    use crate::day_06::{parse, Fishes};
 
     #[test]
     fn silver_smaller_test() {
         let mut fishes = Fishes::new();
-        let fish_count = parse(include_str!("day_06_test_input")).iter()
+        let fish_count = parse(include_str!("day_06_test_input"))
+            .iter()
             .map(|fish| fishes.multiply(*fish, 18))
             .sum::<u64>();
         assert_eq!(fish_count, 26)
@@ -61,7 +65,8 @@ mod test {
     #[test]
     fn silver_test() {
         let mut fishes = Fishes::new();
-        let fish_count = parse(include_str!("day_06_test_input")).iter()
+        let fish_count = parse(include_str!("day_06_test_input"))
+            .iter()
             .map(|fish| fishes.multiply(*fish, 80))
             .sum::<u64>();
         assert_eq!(fish_count, 5934)
@@ -70,7 +75,8 @@ mod test {
     #[test]
     fn silver() {
         let mut fishes = Fishes::new();
-        let fish_count = parse(include_str!("day_06_input")).iter()
+        let fish_count = parse(include_str!("day_06_input"))
+            .iter()
             .map(|fish| fishes.multiply(*fish, 80))
             .sum::<u64>();
         assert_eq!(fish_count, 359999)
@@ -79,7 +85,8 @@ mod test {
     #[test]
     fn gold_test() {
         let mut fishes = Fishes::new();
-        let fish_count = parse(include_str!("day_06_test_input")).iter()
+        let fish_count = parse(include_str!("day_06_test_input"))
+            .iter()
             .map(|fish| fishes.multiply(*fish, 256))
             .sum::<u64>();
         assert_eq!(fish_count, 26984457539)
@@ -88,7 +95,8 @@ mod test {
     #[test]
     fn gold() {
         let mut fishes = Fishes::new();
-        let fish_count = parse(include_str!("day_06_input")).iter()
+        let fish_count = parse(include_str!("day_06_input"))
+            .iter()
             .map(|fish| fishes.multiply(*fish, 256))
             .sum::<u64>();
         assert_eq!(fish_count, 1631647919273)

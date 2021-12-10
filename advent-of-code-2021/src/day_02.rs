@@ -30,7 +30,8 @@ impl Submarine {
 }
 
 fn parse_steps(input: &str) -> Vec<(i32, i32)> {
-    input.lines()
+    input
+        .lines()
         .map(|line| {
             if let Some((direction, d_str)) = line.split_once(" ") {
                 let d = i32::from_str(d_str).unwrap();

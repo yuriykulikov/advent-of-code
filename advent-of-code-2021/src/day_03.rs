@@ -4,9 +4,10 @@ fn gamma_and_epsilon(input: &str) -> (u32, u32) {
     let parsed: Vec<String> = input.lines().into_iter().map(|it| it.to_owned()).collect();
     let line_length = parsed.first().unwrap().len();
 
-    let gamma_str: String = (0..line_length).into_iter().map(|pos| {
-        most_popular_bit(&parsed, pos)
-    }).collect();
+    let gamma_str: String = (0..line_length)
+        .into_iter()
+        .map(|pos| most_popular_bit(&parsed, pos))
+        .collect();
 
     let gamma = u32::from_str_radix(gamma_str.as_str(), 2).unwrap();
     let mask = (0..line_length).fold(0 as u32, |acc, pos| acc + (1 << pos));
@@ -15,7 +16,10 @@ fn gamma_and_epsilon(input: &str) -> (u32, u32) {
 }
 
 fn most_popular_bit(words: &[String], pos: usize) -> char {
-    let with_1 = words.iter().filter(|it| it.chars().nth(pos) == Some('1')).count();
+    let with_1 = words
+        .iter()
+        .filter(|it| it.chars().nth(pos) == Some('1'))
+        .count();
     let with_0 = words.len() - with_1;
     return if with_1 >= with_0 { '1' } else { '0' };
 }
@@ -86,11 +90,17 @@ mod test {
 
     #[test]
     fn gold_test() {
-        assert_eq!(scrubber(include_str!("day_03_test_input")) * oxygen(include_str!("day_03_test_input")), 230);
+        assert_eq!(
+            scrubber(include_str!("day_03_test_input")) * oxygen(include_str!("day_03_test_input")),
+            230
+        );
     }
 
     #[test]
     fn gold() {
-        assert_eq!(scrubber(include_str!("day_03_input")) * oxygen(include_str!("day_03_input")), 2775870);
+        assert_eq!(
+            scrubber(include_str!("day_03_input")) * oxygen(include_str!("day_03_input")),
+            2775870
+        );
     }
 }
