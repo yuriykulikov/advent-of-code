@@ -56,7 +56,7 @@ class Day16TicketTranslation {
 
     @Test
     fun gold() {
-        assertThat(findDepartures(taskInput)).isEqualTo(123333)
+        assertThat(findDepartures(taskInput)).isEqualTo(1439429522627)
     }
 
     /**

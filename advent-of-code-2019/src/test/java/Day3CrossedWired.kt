@@ -1,4 +1,5 @@
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Ignore
 import org.junit.Test
 import kotlin.math.absoluteValue
 
@@ -42,6 +43,7 @@ class Day3CrossedWired {
         }
     }
 
+    @Ignore
     @Test
     fun silverStar() {
         assertThat(firstCrossing(first, second)).isEqualTo(1084)
@@ -55,6 +57,7 @@ class Day3CrossedWired {
         }
     }
 
+    @Ignore
     @Test
     fun goldStar() {
         assertThat(optimalCrossing(first, second)).isEqualTo(9240)

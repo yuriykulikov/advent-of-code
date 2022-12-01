@@ -9,12 +9,14 @@ class Advent20 {
         val pos = x to y
     }
 
+    @Ignore
     @Test
     fun `with nodes`() {
         val node = Node("ESSWWN(E|NNENN(EESS(WNSE|)SSS|WWWSSSSE(SW|NNNE)))")
         assertThat(node.maxLength).isEqualTo(23)
     }
 
+    @Ignore
     @Test
     fun `with nodes2`() {
         val node = Node("WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))")
@@ -35,6 +37,7 @@ class Advent20 {
         assertThat(node.maxLength).isEqualTo(3879)
     }
 
+    @Ignore
     @Test
     fun `with nodes2 map`() {
         val node = Node("WSSEESWWWNW(S|NENNEEEENN(ESSSSW(NWSW|SSEN)|WSWWN(E|WWS(E|SS))))")

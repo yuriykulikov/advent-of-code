@@ -7,3 +7,5 @@ local.properties
 *.iml
 /target
 Cargo.lock
+/build
+**/build

@@ -12,7 +12,7 @@ class Day22CrabCombat {
 
     @Test
     fun silver() {
-        assertThat(playGame(taskInput).score()).isEqualTo(306)
+        assertThat(playGame(taskInput).score()).isEqualTo(32272)
     }
 
     private fun playGame(input: String): List<Int> {

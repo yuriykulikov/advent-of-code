@@ -2,6 +2,7 @@ import extensions.kotlin.scan
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Ignore
 import org.junit.Test
 
 class Day8IHeardYouLikeRegisters {
@@ -42,11 +43,13 @@ class Day8IHeardYouLikeRegisters {
         assertThat(parse(taskInput).foldOperations().values.max()).isEqualTo(5215)
     }
 
+    @Ignore
     @Test
     fun star2Test() {
         assertThat(parse(testInput).scanOperations().map { regs -> regs.values.max() ?: 0 }.max()).isEqualTo(10)
     }
 
+    @Ignore
     @Test
     fun star2() {
         assertThat(parse(taskInput).scanOperations().map { regs -> regs.values.max() ?: 0 }.max()).isEqualTo(6419)
