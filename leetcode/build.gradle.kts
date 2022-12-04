@@ -6,6 +6,6 @@ plugins {
 repositories { mavenCentral() }
 
 dependencies {
-  testImplementation("net.wuerl.kotlin:assertj-core-kotlin:0.1.1")
-  testImplementation("junit:junit:4.12")
+  testImplementation("net.wuerl.kotlin:assertj-core-kotlin:0.2.1")
+  testImplementation("junit:junit:4.13.2")
 }
