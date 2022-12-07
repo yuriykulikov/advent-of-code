@@ -1,16 +1,15 @@
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class Day2RockPaperScissors {
   @Test
   fun silverTest() {
-    expectThat(silverScore(testInput)) isEqualTo 15
+    silverScore(testInput) shouldBe 15
   }
 
   @Test
   fun silver() {
-    expectThat(silverScore(input)) isEqualTo 13221
+    silverScore(input) shouldBe 13221
   }
   private fun silverScore(input: String): Int {
     return input
@@ -25,12 +24,12 @@ class Day2RockPaperScissors {
 
   @Test
   fun goldTest() {
-    expectThat(scoreGold(testInput)) isEqualTo 12
+    scoreGold(testInput) shouldBe 12
   }
 
   @Test
   fun gold() {
-    expectThat(scoreGold(input)) isEqualTo 13131
+    scoreGold(input) shouldBe 13131
   }
   private fun scoreGold(input: String): Int {
     return input

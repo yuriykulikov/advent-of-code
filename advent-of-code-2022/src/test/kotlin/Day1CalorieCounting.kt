@@ -1,26 +1,25 @@
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class Day1CalorieCounting {
   @Test
   fun silverTest() {
-    expectThat(carriedCalories(testInput).max()) isEqualTo 24000
+    carriedCalories(testInput).max() shouldBe 24000
   }
 
   @Test
   fun silver() {
-    expectThat(carriedCalories(input).max()) isEqualTo 72511
+    carriedCalories(input).max() shouldBe 72511
   }
 
   @Test
   fun goldTest() {
-    expectThat(carriedCalories(testInput).sortedDescending().take(3).sum()) isEqualTo 45000
+    carriedCalories(testInput).sortedDescending().take(3).sum() shouldBe 45000
   }
 
   @Test
   fun gold() {
-    expectThat(carriedCalories(input).sortedDescending().take(3).sum()) isEqualTo 212117
+    carriedCalories(input).sortedDescending().take(3).sum() shouldBe 212117
   }
 
   private fun carriedCalories(testInput: String): List<Int> {

@@ -1,16 +1,15 @@
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import strikt.api.expectThat
-import strikt.assertions.isEqualTo
 
 class Day4CampCleanup {
   @Test
   fun silverTest() {
-    expectThat(fullyContained(testInput)) isEqualTo 2
+    fullyContained(testInput) shouldBe 2
   }
 
   @Test
   fun silver() {
-    expectThat(fullyContained(input)) isEqualTo 433
+    fullyContained(input) shouldBe 433
   }
 
   private fun fullyContained(input: String): Int {
@@ -26,12 +25,12 @@ class Day4CampCleanup {
   }
   @Test
   fun goldTest() {
-    expectThat(overlapAtAll(testInput)) isEqualTo 4
+    overlapAtAll(testInput) shouldBe 4
   }
 
   @Test
   fun gold() {
-    expectThat(overlapAtAll(input)) isEqualTo 852
+    overlapAtAll(input) shouldBe 852
   }
 
   private fun overlapAtAll(input: String): Int {

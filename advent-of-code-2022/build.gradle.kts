@@ -7,7 +7,8 @@ dependencies {
   implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
   testImplementation(platform("org.junit:junit-bom:5.9.1"))
   testImplementation("org.junit.jupiter:junit-jupiter")
-  testImplementation("io.strikt:strikt-jvm:0.34.1")
+  testImplementation("org.junit.jupiter:junit-jupiter-params")
+  testImplementation("io.kotest:kotest-assertions-core:5.5.4")
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "11" }
