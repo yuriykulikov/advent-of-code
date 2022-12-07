@@ -34,8 +34,8 @@ class `Day 6 Tuning Trouble` {
     return input
         .toList()
         .windowed(packetLength)
-        .mapIndexed { index, chars -> chars to index }
-        .first { (chars, _) -> chars.distinct().size == packetLength }
-        .second + packetLength
+        .withIndex()
+        .first { (_, chars) -> chars.distinct().size == packetLength }
+        .index + packetLength
   }
 }
