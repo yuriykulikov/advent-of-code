@@ -100,8 +100,7 @@ class `Day 8 Treetop Tree House` {
         65332
         33549
         35390
-    """
-          .trimIndent()
+    """.trimIndent()
 
   fun printMap(tiles: Map<Point, Int>) {
     printMap(tiles) {

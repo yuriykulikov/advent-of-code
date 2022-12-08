@@ -43,21 +43,23 @@ class `Day 7 No Space Left On Device` {
   private fun parseInput(input: String): ElfFile {
     val root = ElfFile("/")
     var current = root
-    input.lines().forEach { line ->
-      when {
-        line.startsWith("\$ ls") -> Unit
-        line.startsWith("\$ cd ") -> {
+    input.trim().lines().forEach { line ->
+      val left = line.substringBeforeLast(" ")
+      val right = line.substringAfterLast(" ")
+      when (left) {
+        "\$ ls" -> Unit
+        "\$ cd" -> {
           current =
-              when (val target = line.substringAfterLast(" ")) {
+              when (right) {
                 "/" -> root
                 ".." -> current.parent ?: current
-                else -> current.contents.firstOrNull { it.name == target } ?: current
+                else -> current.contents.firstOrNull { it.name == right } ?: current
               }
         }
         else -> {
           // dir or file
-          val size = line.substringBefore(" ").toIntOrNull() ?: 0
-          current.contents.add(ElfFile(line.substringAfter(" "), parent = current, size = size))
+          val size = left.toIntOrNull() ?: 0
+          current.contents.add(ElfFile(right, parent = current, size = size))
         }
       }
     }
@@ -91,5 +93,4 @@ $ ls
 8033020 d.log
 5626152 d.ext
 7214296 k    
-"""
-        .trimIndent()
+""".trimIndent()
