@@ -1,6 +1,5 @@
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
+import org.junit.jupiter.api.Test
 
 class `Day 7 No Space Left On Device` {
   data class ElfFile(
@@ -15,36 +14,30 @@ class `Day 7 No Space Left On Device` {
       return sequenceOf(this) + contents.flatMap { it.walk() }
     }
   }
-  @ParameterizedTest
-  @ValueSource(booleans = [true, false])
-  fun silverTest(parseInput2: Boolean) {
-    val root = if (parseInput2) parseInput2(testInput) else parseInput(testInput)
+  @Test
+  fun silverTest() {
+    val root = parseInput(testInput)
     root.walk().filter { it.isDir && it.totalSize < 100000 }.sumOf { it.totalSize } shouldBe 95437
   }
-  @ParameterizedTest
-  @ValueSource(booleans = [true, false])
-  fun silver(parseInput2: Boolean) {
-    val root =
-        if (parseInput2) parseInput2(loadResource("day7")) else parseInput(loadResource("day7"))
+  @Test
+  fun silver() {
+    val root = parseInput(loadResource("day7"))
     root.walk().filter { it.isDir && it.totalSize < 100000 }.sumOf { it.totalSize } shouldBe 1334506
   }
-  @ParameterizedTest
-  @ValueSource(booleans = [true, false])
-  fun goldTest(parseInput2: Boolean) {
-    val root = if (parseInput2) parseInput2(testInput) else parseInput(testInput)
-    val needToFree = root.totalSize + 30000000 - 70000000
-    root.walk().filter { it.isDir && it.totalSize > needToFree }.map { it.totalSize }.min() shouldBe
-        24933642
+  @Test
+  fun goldTest() {
+    val root = parseInput(testInput)
+    smallestFolderToDelete(root) shouldBe 24933642
   }
 
-  @ParameterizedTest
-  @ValueSource(booleans = [true, false])
-  fun gold(parseInput2: Boolean) {
-    val root =
-        if (parseInput2) parseInput2(loadResource("day7")) else parseInput(loadResource("day7"))
+  @Test
+  fun gold() {
+    val root = parseInput(loadResource("day7"))
+    smallestFolderToDelete(root) shouldBe 7421137
+  }
+  private fun smallestFolderToDelete(root: ElfFile): Int {
     val needToFree = root.totalSize + 30000000 - 70000000
-    root.walk().filter { it.isDir && it.totalSize > needToFree }.map { it.totalSize }.min() shouldBe
-        7421137
+    return root.walk().filter { it.isDir && it.totalSize > needToFree }.map { it.totalSize }.min()
   }
 
   private fun parseInput(input: String): ElfFile {
@@ -65,32 +58,6 @@ class `Day 7 No Space Left On Device` {
           // dir or file
           val size = line.substringBefore(" ").toIntOrNull() ?: 0
           current.contents.add(ElfFile(line.substringAfter(" "), parent = current, size = size))
-        }
-      }
-    }
-
-    return root
-  }
-
-  /** Use an ArrayDeque to keep track of `cd` dir */
-  private fun parseInput2(input: String): ElfFile {
-    val root = ElfFile("/")
-    val stack = ArrayDeque<ElfFile>()
-    input.lines().forEach { line ->
-      when {
-        line.startsWith("\$ ls") -> Unit
-        line.startsWith("\$ cd ") -> {
-          when (val target = line.substringAfterLast(" ")) {
-            "/" -> stack.add(root)
-            ".." -> stack.removeLast()
-            else -> stack.add(stack.last().contents.first { it.name == target })
-          }
-        }
-        else -> {
-          // dir or file
-          val size = line.substringBefore(" ").toIntOrNull() ?: 0
-          val elfFile = ElfFile(name = line.substringAfter(" "), size = size)
-          stack.last().contents.add(elfFile)
         }
       }
     }
@@ -124,4 +91,5 @@ $ ls
 8033020 d.log
 5626152 d.ext
 7214296 k    
-""".trimIndent()
+"""
+        .trimIndent()
