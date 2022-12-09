@@ -4,7 +4,7 @@ fun <T> printMap(
     tiles: Map<Point, T>,
     invertedY: Boolean = true,
     prefixFun: (Int) -> String = { "" },
-    func: (T?) -> String = { "${it ?: "n"}" }
+    func: (T?) -> String = { "${it ?: " "}" }
 ) {
   val maxX = tiles.keys.maxOf { it.x }
   val minX = tiles.keys.minOf { it.x }
@@ -35,3 +35,17 @@ operator fun Point.rangeTo(other: Point): List<Point> =
       y == other.y -> (x..other.x).map { Point(it, y) }
       else -> error("Cannot go from $this to $other")
     }
+
+fun Point.left(inc: Int = 1) = copy(x = x - inc)
+
+fun Point.right(inc: Int = 1) = copy(x = x + inc)
+
+fun Point.up(inc: Int = 1) = copy(y = y - inc)
+
+fun Point.down(inc: Int = 1) = copy(y = y + inc)
+
+operator fun Point.minus(other: Point) = Point(x - other.x, y - other.y)
+
+operator fun Point.plus(other: Point) = Point(x + other.x, y + other.y)
+
+fun Point.direction() = Point(x = x.compareTo(0), y = y.compareTo(0))
