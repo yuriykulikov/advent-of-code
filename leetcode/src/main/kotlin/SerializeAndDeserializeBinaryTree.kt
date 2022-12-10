@@ -2,6 +2,9 @@ class TreeNode(var `val`: Int) {
   var left: TreeNode? = null
   var right: TreeNode? = null
 }
+
+fun tree(data: String) = SerializeAndDeserializeBinaryTree().deserialize(data)
+
 /** https://leetcode.com/explore/interview/card/google/65/design-4/3092/ */
 class SerializeAndDeserializeBinaryTree {
   fun serialize(root: TreeNode?): String {
