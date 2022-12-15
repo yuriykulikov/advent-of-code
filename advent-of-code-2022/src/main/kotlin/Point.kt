@@ -1,4 +1,19 @@
+import kotlin.math.abs
+
 data class Point(val x: Int, val y: Int)
+
+fun printMap(
+    tiles: Map<Point, String>,
+) {
+  val maxX = tiles.keys.maxOf { it.x }
+  val minX = tiles.keys.minOf { it.x }
+  val maxY = tiles.keys.maxOf { it.y }
+  val minY = tiles.keys.minOf { it.y }
+
+  (minY..maxY)
+      .map { y -> (minX..maxX).joinToString(separator = "") { x -> tiles[Point(x, y)] ?: " " } }
+      .forEach { println(it) }
+}
 
 fun <T> printMap(
     tiles: Map<Point, T>,
@@ -13,10 +28,10 @@ fun <T> printMap(
 
   (minY..maxY)
       .run { if (invertedY) sorted() else sortedDescending() }
-      .mapIndexed { index, y ->
+      .map { y ->
         (minX..maxX)
             .map { x -> tiles[Point(x, y)] }
-            .joinToString(prefix = prefixFun(index), separator = "", transform = func)
+            .joinToString(prefix = prefixFun(y), separator = "", transform = func)
       }
       .forEach { println(it) }
 }
@@ -49,3 +64,5 @@ operator fun Point.minus(other: Point) = Point(x - other.x, y - other.y)
 operator fun Point.plus(other: Point) = Point(x + other.x, y + other.y)
 
 fun Point.direction() = Point(x = x.compareTo(0), y = y.compareTo(0))
+
+fun Point.manhattan(): Int = abs(x) + abs(y)
