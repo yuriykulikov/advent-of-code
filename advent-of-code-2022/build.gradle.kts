@@ -14,7 +14,13 @@ dependencies {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "11" }
 
-tasks { test { useJUnitPlatform() } }
+tasks {
+  test {
+    minHeapSize = "8g"
+    maxHeapSize = "16g"
+    useJUnitPlatform()
+  }
+}
 
 spotless {
   kotlin {
