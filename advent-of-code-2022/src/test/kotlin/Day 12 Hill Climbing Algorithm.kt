@@ -16,7 +16,7 @@ enum class Algorithm {
   BFS,
 }
 
-@Timeout(2)
+@Timeout(5)
 class `Day 12 Hill Climbing Algorithm` {
   private var calls: Int = 0
   @AfterEach

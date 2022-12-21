@@ -1,6 +1,13 @@
 import kotlin.math.abs
 
-data class Point(val x: Int, val y: Int)
+data class Point(val x: Int, val y: Int) {
+  override fun hashCode(): Int {
+    return x * 106039 + (y and 0xffff)
+  }
+  override fun equals(other: Any?): Boolean {
+    return other is Point && other.x == x && other.y == y
+  }
+}
 
 fun printMap(
     tiles: Map<Point, String>,
@@ -15,11 +22,33 @@ fun printMap(
       .forEach { println(it) }
 }
 
+fun <T> mapContentToString(
+    tiles: Map<Point, T>,
+    invertedY: Boolean = true,
+    prefixFun: (Int) -> String = { "" },
+    func: Point.(T?) -> String = { "${it ?: " "}" }
+): String = buildString {
+  val maxX = tiles.keys.maxOf { it.x }
+  val minX = tiles.keys.minOf { it.x }
+  val maxY = tiles.keys.maxOf { it.y }
+  val minY = tiles.keys.minOf { it.y }
+
+  (minY..maxY)
+      .run { if (invertedY) sorted() else sortedDescending() }
+      .map { y ->
+        (minX..maxX).joinToString(
+            prefix = prefixFun(y),
+            separator = "",
+            transform = { x -> func(Point(x, y), tiles[Point(x, y)]) })
+      }
+      .forEach { append(it).append("\n") }
+}
+
 fun <T> printMap(
     tiles: Map<Point, T>,
     invertedY: Boolean = true,
     prefixFun: (Int) -> String = { "" },
-    func: (T?) -> String = { "${it ?: " "}" }
+    func: Point.(T?) -> String = { "${it ?: " "}" }
 ) {
   val maxX = tiles.keys.maxOf { it.x }
   val minX = tiles.keys.minOf { it.x }
@@ -29,9 +58,10 @@ fun <T> printMap(
   (minY..maxY)
       .run { if (invertedY) sorted() else sortedDescending() }
       .map { y ->
-        (minX..maxX)
-            .map { x -> tiles[Point(x, y)] }
-            .joinToString(prefix = prefixFun(y), separator = "", transform = func)
+        (minX..maxX).joinToString(
+            prefix = prefixFun(y),
+            separator = "",
+            transform = { x -> func(Point(x, y), tiles[Point(x, y)]) })
       }
       .forEach { println(it) }
 }
