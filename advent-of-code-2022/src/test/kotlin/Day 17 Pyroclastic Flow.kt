@@ -24,8 +24,7 @@ class `Day 17 Pyroclastic Flow` {
 
 |..##
 |..##
-    """
-          .trimIndent()
+    """.trimIndent()
 
   private val rocks =
       rocksString.split("\n\n").map { lines -> parseMap(lines).filterValues { it == '#' } }

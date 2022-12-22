@@ -17,8 +17,7 @@ class `Day 20 Grove Positioning System` {
             [1, 2, -3, 0, 3, 4, -2]
             [1, 2, -3, 0, 3, 4, -2]
             [1, 2, -3, 4, 0, 3, -2]
-        """
-            .trimIndent()
+        """.trimIndent()
   }
   @Test
   fun silverTest() {

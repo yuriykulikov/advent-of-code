@@ -16,10 +16,10 @@ class `Day 18 Boiling Boulders` {
     surfaceOf(testData, excludePockets = true) shouldBe 58
   }
 
-    @Test
-    fun gold() {
-        surfaceOf(loadResource("day18"), excludePockets = true) shouldBe 2052
-    }
+  @Test
+  fun gold() {
+    surfaceOf(loadResource("day18"), excludePockets = true) shouldBe 2052
+  }
   @Test
   fun surfaceOf(data: String, excludePockets: Boolean = false): Int {
     val points =
@@ -86,6 +86,5 @@ class `Day 18 Boiling Boulders` {
 3,2,5
 2,1,5
 2,3,5
-    """
-          .trimIndent()
+    """.trimIndent()
 }
