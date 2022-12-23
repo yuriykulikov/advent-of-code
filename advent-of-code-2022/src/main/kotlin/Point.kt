@@ -96,3 +96,7 @@ operator fun Point.plus(other: Point) = Point(x + other.x, y + other.y)
 fun Point.direction() = Point(x = x.compareTo(0), y = y.compareTo(0))
 
 fun Point.manhattan(): Int = abs(x) + abs(y)
+
+fun Point.rotateCCW() = Point(x = -y, y = x)
+
+fun Point.rotateCW() = Point(x = y, y = -x)
