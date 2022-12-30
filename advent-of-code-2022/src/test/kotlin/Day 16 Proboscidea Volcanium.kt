@@ -1,56 +1,88 @@
 import io.kotest.matchers.shouldBe
+import java.math.BigInteger
 import kotlin.math.min
-import kotlinx.collections.immutable.PersistentMap
-import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Timeout
 
 @Timeout(240)
 class `Day 16 Proboscidea Volcanium` {
+  companion object {
+    fun totalPressure(map: Map<String, Valve>, opened: Map<String, Int>, elapsed: Int): Int {
+      return opened.map { (name, instant) -> (elapsed - instant) * map.getValue(name).rate }.sum()
+    }
+  }
+  data class Valve(val name: String, val rate: Int, val children: List<String>)
   @Test
   fun testParsing() {
     parse(testInput).forEach { println(it) }
-  }
-  data class Valve(val name: String, val rate: Int, val children: List<String>)
-  fun parse(input: String): Map<String, Valve> {
-    return input
-        .lines()
-        .filter { it.isNotBlank() }
-        .associate { line ->
-          val (_, name, rate, children) =
-              line.split(
-                  "Valve ",
-                  " has flow rate=",
-                  "; tunnels lead to valves ",
-                  "; tunnel leads to valve ",
-                  "; tunnel lead to valves ",
-                  "; tunnels lead to valve ",
-              )
-
-          name to Valve(name, rate.toInt(), children.split(", "))
-        }
   }
 
   @Test
   fun silverTest() {
     val map = parse(testInput)
-    maxPressureIn30Minutes(map).totalPressure(map) shouldBe 1651
+    totalPressure(map, maxPressureOneAgent(map, maxElapsed = 30).opened, 30) shouldBe 1651
   }
 
   @Test
   fun silver() {
     val map = parse(loadResource("day16"))
-    maxPressureIn30Minutes(map).totalPressure(map) shouldBe 1376
+    totalPressure(map, maxPressureOneAgent(map, maxElapsed = 30).opened, 30) shouldBe 1376
   }
 
   @Test
   fun goldTest() {
-    maxPressureIn26MinutesDP(testInput) shouldBe 1707
+    maxPressureTwoAgents(testInput) shouldBe 1707
   }
+
   @Test
   fun gold() {
-    maxPressureIn26MinutesDP(loadResource("day16")) shouldBe 1933
+    maxPressureTwoAgents(loadResource("day16")) shouldBe 1933
   }
+
+  @Test
+  fun goldTestDivideAndConquer() {
+    maxPressureTwoAgentsDivideAndConquer(parse(testInput)) shouldBe 1707
+  }
+  @Test
+  fun goldDivideAndConquer() {
+    maxPressureTwoAgentsDivideAndConquer(parse(loadResource("day16"))) shouldBe 1933
+  }
+
+  /** All possible splits of a set into two sets. */
+  private fun <T> Set<T>.splits(): Set<Set<T>> {
+    val set = this
+    val combinationsSize = BigInteger.TWO.pow(size - 1).intValueExact()
+    return buildSet {
+      for (combination in 0 until combinationsSize) {
+        val picked = buildSet {
+          set.forEachIndexed { index, element ->
+            if (combination shr index and 1 == 1) {
+              add(element)
+            }
+          }
+        }
+
+        add(picked)
+      }
+    }
+  }
+
+  /** Split the work between two agents, run [maxPressureOneAgent] and find the best split. */
+  private fun maxPressureTwoAgentsDivideAndConquer(map: Map<String, Valve>): Int? {
+    val passages: Map<String, List<Pair<String, Int>>> = passages(map)
+    val targets = map.filterValues { it.rate != 0 }.keys.toSet()
+    val totalPressure =
+        targets.splits().maxOfOrNull { humanValves ->
+          val humanAgentPath =
+              maxPressureOneAgent(map, passages, maxElapsed = 26, avoid = targets - humanValves)
+          val elephantAgentPath =
+              maxPressureOneAgent(map, passages, maxElapsed = 26, avoid = humanValves)
+          totalPressure(map, humanAgentPath.opened + elephantAgentPath.opened, 26)
+        }
+    return totalPressure
+  }
+
   private fun checkInterrupted() {
     check(!Thread.currentThread().isInterrupted) { "Interrupted!" }
   }
@@ -59,22 +91,21 @@ class `Day 16 Proboscidea Volcanium` {
       val elapsed: Int,
       val opened: Map<String, Int>,
   ) {
-    fun totalPressure(map: Map<String, Valve>): Int {
-      return opened.map { (name, instant) -> (30 - instant) * map.getValue(name).rate }.sum()
-    }
-
     override fun toString(): String {
       return opened.toString()
     }
   }
 
-  private fun maxPressureIn30Minutes(map: Map<String, Valve>, maxElapsed: Int = 30): Path {
-    val reach: Map<String, List<Pair<String, Int>>> = reachesOf(map)
-
+  private fun maxPressureOneAgent(
+      map: Map<String, Valve>,
+      reach: Map<String, List<Pair<String, Int>>> = passages(map),
+      maxElapsed: Int = 30,
+      avoid: Set<String> = emptySet()
+  ): Path {
     fun Path.getTunnelOptions() =
         reach
             .getValue(position)
-            .filter { (name, _) -> name !in opened }
+            .filter { (name, _) -> name !in opened && name !in avoid }
             .filter { (_, timeToReach) -> elapsed + timeToReach + 1 <= maxElapsed }
             .map { (name, timeToReach) ->
               copy(
@@ -83,13 +114,16 @@ class `Day 16 Proboscidea Volcanium` {
                   opened = opened.plus(name to timeToReach + elapsed + 1))
             }
 
-    fun Path.deeper(): List<Path> {
+    /** Simple DFS */
+    fun Path.deeper(): Path {
       checkInterrupted()
       check(elapsed <= maxElapsed)
-      return getTunnelOptions().takeIf { it.isNotEmpty() }?.flatMap { it.deeper() } ?: listOf(this)
+      val options = getTunnelOptions()
+      return if (options.isEmpty()) this
+      else options.map { it.deeper() }.maxBy { totalPressure(map, it.opened, maxElapsed) }
     }
 
-    return Path("AA", 0, emptyMap()).deeper().maxBy { it.totalPressure(map) }
+    return Path("AA", 0, emptyMap()).deeper()
   }
 
   data class Path2(
@@ -99,11 +133,7 @@ class `Day 16 Proboscidea Volcanium` {
       val freeAt2: Int,
       val elapsed: Int,
       val opened: PersistentMap<String, Int>,
-  ) {
-    fun totalPressure(map: Map<String, Valve>): Int {
-      return opened.map { (name, instant) -> (26 - instant) * map.getValue(name).rate }.sum()
-    }
-  }
+  )
 
   operator fun <T> List<T>.times(other: List<T>): List<List<T>> {
     val prod = mutableListOf<List<T>>()
@@ -114,10 +144,14 @@ class `Day 16 Proboscidea Volcanium` {
     }
     return prod
   }
-  private fun maxPressureIn26MinutesDP(testInput: String): Int {
+
+  /**
+   * Way too complicated. And slow. See [maxPressureTwoAgentsDivideAndConquer] for a better solution
+   */
+  private fun maxPressureTwoAgents(testInput: String): Int {
     val maxElapsed = 26
     val map = parse(testInput)
-    val reach: Map<String, List<Pair<String, Int>>> = reachesOf(map)
+    val reach: Map<String, List<Pair<String, Int>>> = passages(map)
 
     fun Path2.reachableFrom(from: String) =
         reach
@@ -125,7 +159,7 @@ class `Day 16 Proboscidea Volcanium` {
             .filter { (name, _) -> name !in opened }
             .filter { (_, timeToReach) -> elapsed + timeToReach + 1 <= maxElapsed }
 
-    fun Path2.branchOut(): List<Path2> {
+    fun Path2.branchOut(): Path2 {
       checkInterrupted()
       check(elapsed <= maxElapsed)
       check(elapsed <= freeAt1)
@@ -178,20 +212,17 @@ class `Day 16 Proboscidea Volcanium` {
             }
           }
 
-      return if (branches.isEmpty()) return listOf(this)
-      else
-          branches
-              // I am sure there is something to prune here...
-              .take(16)
-              .flatMap { it.branchOut() }
+      return if (branches.isEmpty()) return this
+      else {
+        branches.map { it.branchOut() }.maxBy { totalPressure(map, it.opened, 26) }
+      }
     }
 
-    return Path2("AA", "AA", 0, 0, 0, persistentMapOf())
-        .branchOut()
-        .maxBy { it.totalPressure(map) }
-        .totalPressure(map)
+    return totalPressure(map, Path2("AA", "AA", 0, 0, 0, persistentMapOf()).branchOut().opened, 26)
   }
-  private fun reachesOf(map: Map<String, Valve>): Map<String, List<Pair<String, Int>>> {
+
+  /** Calculates distances from each valve to each valve which has a positive flow rate. */
+  private fun passages(map: Map<String, Valve>): Map<String, List<Pair<String, Int>>> {
     return map.mapValues { (name, _) ->
       dijkstra(name, map).filter { (name, _) -> map.getValue(name).rate > 0 }
     }
@@ -215,6 +246,25 @@ class `Day 16 Proboscidea Volcanium` {
     }
 
     return distances.map { (k, v) -> k to v }
+  }
+
+  private fun parse(input: String): Map<String, Valve> {
+    return input
+        .lines()
+        .filter { it.isNotBlank() }
+        .associate { line ->
+          val (_, name, rate, children) =
+              line.split(
+                  "Valve ",
+                  " has flow rate=",
+                  "; tunnels lead to valves ",
+                  "; tunnel leads to valve ",
+                  "; tunnel lead to valves ",
+                  "; tunnels lead to valve ",
+              )
+
+          name to Valve(name, rate.toInt(), children.split(", "))
+        }
   }
 
   private val testInput =
