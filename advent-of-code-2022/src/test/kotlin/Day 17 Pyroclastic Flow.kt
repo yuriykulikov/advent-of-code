@@ -88,27 +88,15 @@ class `Day 17 Pyroclastic Flow` {
   @Test
   fun goldTest() {
     val moves = testInput.map { if (it == '>') 1 else -1 }.cycleIterator()
-    val result = heightOfVeryTallTower(generateRockSequence(moves))
+    val result = heightOfVeryTallTower(heightIncrements(moves))
     result shouldBe 1514285714288
   }
 
   @Test
   fun gold() {
     val moves = loadResource("day17").map { if (it == '>') 1 else -1 }.cycleIterator()
-    val result = heightOfVeryTallTower(generateRockSequence(moves))
+    val result = heightOfVeryTallTower(heightIncrements(moves))
     result shouldBe 1575811209487
-  }
-
-  @Test
-  fun cycleDetectionTest() {
-    heightOfVeryTallTower(loadResource("day17gold").split(", ").map(String::toInt)) shouldBe
-        1514285714288
-  }
-
-  @Test
-  fun cycleDetection() {
-    heightOfVeryTallTower(loadResource("day17gold2").split(", ").map(String::toInt)) shouldBe
-        1575811209487
   }
 
   private fun heightOfVeryTallTower(data: List<Int>): Long {
@@ -123,12 +111,19 @@ class `Day 17 Pyroclastic Flow` {
         suffixValues.sum().toLong()
   }
 
-  private fun generateRockSequence(moves: Iterator<Int>, size: Int = 5023): List<Int> {
-    return fallingRocks(moves)
-        .take(size)
-        .windowed(2)
-        .map { (l, r) -> l.first.keys.minOf(Point::y) - r.first.keys.minOf(Point::y) }
-        .toList()
+  private fun heightIncrements(moves: Iterator<Int>, size: Int = 5023): List<Int> {
+    val map = parseMap("+-------+").toMutableMap()
+    var rock = 0
+    return (0..size)
+        .map {
+          // one rock falls
+          val startingPos = map.keys.minBy { it.y }.y - 4
+          val fallenRock = fallenRock(rock, startingPos, map, moves)
+          map.putAll(fallenRock)
+          rock = rock.next()
+          fallenRock.keys.minOf(Point::y)
+        }
+        .windowed(2) { (prev, next) -> prev - next }
   }
 
   private fun fallingRocks(moves: Iterator<Int>): Sequence<Pair<PersistentMap<Point, Char>, Int>> {
@@ -176,7 +171,7 @@ class `Day 17 Pyroclastic Flow` {
   private fun fallenRock(
       rockIndex: Int,
       startingPos: Int,
-      map: PersistentMap<Point, Char>,
+      map: Map<Point, Char>,
       moves: Iterator<Int>,
   ): Map<Point, Char> {
     checkInterrupted()
