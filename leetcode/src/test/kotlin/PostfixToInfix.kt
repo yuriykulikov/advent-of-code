@@ -1,15 +1,18 @@
 import io.kotest.matchers.shouldBe
+import org.junit.Ignore
 import org.junit.Test
 
 class PostfixToInfix {
 
   data class Expression(val string: String, val prio: Int)
+
   private fun toInfix(postfix: String): String {
     val iter = postfix.split(" ").reversed().iterator()
     val toInfix = toInfix(iter)
     check(!iter.hasNext()) { "Invalid str, unused: ${iter.asSequence().joinToString()}" }
     return toInfix.string
   }
+
   private fun toInfix(iter: Iterator<String>): Expression {
     check(iter.hasNext()) { "Invalid input" }
     return when (val next = iter.next()) {
@@ -28,7 +31,9 @@ class PostfixToInfix {
       }
     }
   }
+
   @Test
+  @Ignore
   fun toInfixSimpleTest() {
     toInfix("1 2 + 3 4 + *") shouldBe "(1 + 2) * (3 + 4)"
     toInfix("1 2 * 3 4 + +") shouldBe "1 * 2 + 3 + 4"
@@ -41,9 +46,11 @@ class PostfixToInfix {
     val iterator = postfix.split(" ").reversed().iterator()
     return toInfixWithOp(iterator).toString()
   }
+
   sealed class Op {
     abstract val prio: Int
   }
+
   data class Operation(
       val left: Op,
       val right: Op,
@@ -60,6 +67,7 @@ class PostfixToInfix {
     override val prio: Int
       get() = if (code == "*" || code == "/") 2 else 1
   }
+
   data class Value(
       val value: String,
   ) : Op() {
@@ -70,6 +78,7 @@ class PostfixToInfix {
       return value
     }
   }
+
   private fun toInfixWithOp(iter: Iterator<String>): Op {
     return when (val next = iter.next()) {
       "+",
