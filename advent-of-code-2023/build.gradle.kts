@@ -6,7 +6,7 @@ plugins {
 repositories { mavenCentral() }
 
 dependencies {
-  implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+  implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
   implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
   testImplementation(platform("org.junit:junit-bom:5.9.1"))
   testImplementation("org.junit.jupiter:junit-jupiter")

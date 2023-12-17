@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
   java
-  val kotlin = "1.7.21"
+  val kotlin = "1.9.0"
   kotlin("jvm") version kotlin apply false
   id("com.diffplug.spotless") version "6.11.0"
   id("com.adarshr.test-logger") version "3.2.0"
