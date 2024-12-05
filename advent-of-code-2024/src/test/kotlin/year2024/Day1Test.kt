@@ -1,4 +1,7 @@
+package year2024
+
 import io.kotest.matchers.shouldBe
+import loadResource
 import org.junit.jupiter.api.Test
 import kotlin.math.absoluteValue
 
