@@ -1,24 +1,15 @@
-package year2024
+package year2025
 
 import Point
 import down
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import loadResource
 import org.junit.jupiter.api.Test
-import kotlin.math.max
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import left
 import parseMap
 import right
 import up
-import java.util.concurrent.ConcurrentHashMap
-import kotlin.coroutines.CoroutineContext
 
 class Day4Test {
     private val example = """

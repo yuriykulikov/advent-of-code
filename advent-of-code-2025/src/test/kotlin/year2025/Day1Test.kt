@@ -4,7 +4,6 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import loadResource
 import org.junit.jupiter.api.Test
-import kotlin.collections.count
 import kotlin.math.absoluteValue
 
 class Day1Test {

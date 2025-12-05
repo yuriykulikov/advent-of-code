@@ -1,4 +1,4 @@
-package year2024
+package year2025
 
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.collections.shouldContain
